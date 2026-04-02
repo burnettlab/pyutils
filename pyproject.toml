@@ -1,0 +1,25 @@
+[project]
+name = "pyutils"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+authors = [
+    { name = "brandonhippe", email = "bhippe@villanova.edu" }
+]
+requires-python = ">=3.11.9"
+dependencies = [
+    "adjusttext>=1.3.0",
+    "auto-all>=1.4.1",
+    "colorspacious>=1.1.2",
+    "ipython>=9.10.1",
+    "pint>=0.25.3",
+    "pip>=26.0.1",
+    "pyyaml>=6.0.3",
+]
+
+[project.scripts]
+pyutils = "pyutils:main"
+
+[build-system]
+requires = ["uv_build>=0.11.2,<0.12.0"]
+build-backend = "uv_build"
