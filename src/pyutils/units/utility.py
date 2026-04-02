@@ -2,15 +2,15 @@ import inspect
 import os
 import re
 from functools import cached_property, partial, wraps
-from typing import Any, Callable, List, Optional, Union
+from typing import Any, Callable, Iterable, List, Optional, Union
 
 import numpy as np
 from auto_all import public
 from pint import Quantity
 from pint.facets.plain import PlainQuantity
 
-from pyutils.funcs import get_anno_class
 from pyutils.decorators import update_signature_from_partial, wrap_once
+from pyutils.funcs import get_anno_class
 
 from . import NUMBER_RE, UREG
 from .unit_types import *
