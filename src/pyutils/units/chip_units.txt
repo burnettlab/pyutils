@@ -2,3 +2,4 @@ gm_id = siemens / ampere = S/A = gmid = transconductance_efficiency
 efficiency = hertz * siemens / ampere = _
 body_effect_coeff = volt ** 0.5 = _
 micron = [length] = μm = micrometer
+sq_micron = length ** 2 = μm^2 = square_micron = square_micrometer

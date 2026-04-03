@@ -60,7 +60,7 @@ start_all()
 NUM = TypeVar("NUM", *NUM.__constraints__, UnitType)
 Vector = Union[*Vector.__args__, PlainQuantity[npt.NDArray[T]]]
 
-for unit in filter(lambda t: isinstance(t, (UREG.Unit, PlainUnit)), map(lambda k: getattr(UREG, k, None), list(UREG) + ["Dimensionless"])):
+for unit in filter(lambda t: isinstance(t, (UREG.Unit, PlainUnit)), map(lambda k: getattr(UREG, k, None), list(UREG) + ["dimensionless"])):
     name = ''.join(map(lambda s: s.capitalize(), str(unit).split('_')))
     globals()[name] = type(name, (UnitType,), {}, __unit__=unit)
 
