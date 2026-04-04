@@ -4,7 +4,19 @@ import re
 from types import CodeType
 from typing import *
 
+import numpy.typing as npt
 from auto_all import public
+
+
+def reduce_valid(valid: npt.ArrayLike, *args: Tuple[npt.ArrayLike]) -> Iterator[npt.ArrayLike]:
+    """ Reduce a sequence of numpy arrays based on a `valid` condition 
+    Args:
+        valid [npt.ArrayLike]: Which elements to accept
+        *args [Tuple[npt.ArrayLike]]: Arrays to filter
+    Returns:
+        Iterator[npt.ArrayLike]: Iterator of filtered arrays
+    """
+    return map(lambda a: a[valid], args)
 
 
 @public

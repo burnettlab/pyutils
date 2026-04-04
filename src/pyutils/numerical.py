@@ -97,3 +97,24 @@ def symmetric_logscale(min_val: float, max_val: float, num_points: int=100) -> n
     assert min_val > 0 and max_val > 0, "min_val and max_val must both be positive"     # type: ignore
     low_half = np.logspace(np.log10(min_val), np.log10(max_val / 2), num_points // 2 + 1)      # type: ignore
     return np.concatenate((low_half, max_val - low_half[-2::-1]))
+
+
+@public
+def converge_iter(max_iter=5) -> Generator[None, Tuple[Any, ...], None]:
+    """ Generator to iteratively converge a set of values.  
+        Yields control back to the caller until convergence is reached or max_iter is exceeded.
+    """
+    assert max_iter > 0, "max_iter must be greater than 0"
+    args = yield
+    if not isinstance(args, tuple):
+        args = (args,)
+
+    for iter_count in range(max_iter):
+        new_args = yield
+        if not isinstance(new_args, tuple):
+            new_args = (new_args,)
+
+        if all(compare_args(a, b) for a, b in zip(args, new_args, strict=True)):
+            print(f"Converged after {iter_count+1} iterations.")
+            break
+        args = new_args
