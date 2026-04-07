@@ -1,4 +1,4 @@
-""" plotter-helpers: Collection of helpers for plotting with matplotlib """
+""" plotting: Collection of helpers for plotting with matplotlib """
 import glob
 import importlib
 import sys
