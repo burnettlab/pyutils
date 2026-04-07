@@ -31,6 +31,9 @@ class UnitType(Quantity):
         return self.__unit__
 
     def __new__(cls, num: NUM):
+        if getattr(getattr(num, "dtype", None), "type", None) == np.bytes_:
+            num = str(num.astype(str))      # type: ignore
+
         if isinstance(num, (Quantity, PlainQuantity)):
             cls.value = num.to(cls.units.func(cls))
         elif isinstance(num, str):
@@ -61,7 +64,7 @@ NUM = TypeVar("NUM", *NUM.__constraints__, UnitType)
 Vector = Union[*Vector.__args__, PlainQuantity[npt.NDArray[T]]]
 
 for unit in filter(lambda t: isinstance(t, (UREG.Unit, PlainUnit)), map(lambda k: getattr(UREG, k, None), list(UREG) + ["dimensionless"])):
-    name = ''.join(map(lambda s: s.capitalize(), str(unit).split('_')))
+    name = ''.join(map(lambda s: s.capitalize(), f"{unit:D}".split('_')))
     globals()[name] = type(name, (UnitType,), {}, __unit__=unit)
 
 end_all()

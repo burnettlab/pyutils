@@ -7,14 +7,14 @@ from typing import Any, Callable, Iterable, List, Optional, Union
 import numpy as np
 from auto_all import public
 from pint import Quantity
-from pint.facets.plain import PlainQuantity
+from pint.facets.plain import PlainQuantity, PlainUnit
 
 from pyutils.decorators import update_signature_from_partial, wrap_once
 from pyutils.funcs import get_anno_class
 
 from . import NUMBER_RE, UREG
-from .unit_types import *
 from .unit_types import NUM
+from .unit_types import *
 
 
 def has_unit(x: NUM):
@@ -220,3 +220,10 @@ def apply_unit_wraps(cls: object) -> object:
             setattr(cls, key, dynamic_unit_wrap(attr))
 
     return cls
+
+def unit_str_addon(unit: Union[NUM, UREG.Unit, PlainUnit]) -> str:
+    """ Turn a unit (or quantity with a unit) into a string formatted like [`UNIT`] """
+    if not isinstance(unit, (UREG.Unit, PlainUnit)) and not hasattr(unit, "units"):
+        return ""
+    unit = getattr(unit, "units", unit)
+    return " [-]" if unit == UREG.dimensionless else fr" [{unit:~P}]"
