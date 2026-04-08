@@ -53,9 +53,9 @@ def axis_units(ax: Axes, *, x_format_wrapper: Optional[Callable[Callable, Callab
         
         return wrapper
 
-    ax.set_xlabel = append_units_wrapper(ax.set_xlabel, ax=ax.xaxis, format_wrapper=x_format_wrapper or format_wrapper)
+    ax.set_xlabel = append_units_wrapper(ax.set_xlabel, ax=ax.xaxis, format_wrapper=x_format_wrapper or format_wrapper)     # type: ignore
     ax.set_xlabel(ax.get_ylabel())
-    ax.set_ylabel = append_units_wrapper(ax.set_ylabel, ax=ax.yaxis, format_wrapper=y_format_wrapper or format_wrapper)
+    ax.set_ylabel = append_units_wrapper(ax.set_ylabel, ax=ax.yaxis, format_wrapper=y_format_wrapper or format_wrapper)     # type: ignore
     ax.set_ylabel(ax.get_ylabel())
 
 
