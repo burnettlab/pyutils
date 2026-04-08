@@ -1,15 +1,15 @@
 """ Functions to manage text for plots """
 from dataclasses import dataclass
 from functools import wraps
-from typing import Dict, List, Self
+from typing import Callable, Dict, List, Optional, Self
 
 import matplotlib.pyplot as plt
 from adjustText import adjust_text
-from matplotlib.axes import Axes
-from matplotlib.text import Text
-
-from pyutils.units.utility import unit_str_addon
 from auto_all import public
+from matplotlib.axes import Axes
+from matplotlib.axis import Axis
+from matplotlib.text import Text
+from pyutils.units.utility import unit_str_addon
 
 
 @public
@@ -39,17 +39,23 @@ def escape_latex(text: str, special_chars: Dict[str, str]={}):
 
 
 @public
-def axis_units(ax: Axes):
-    """ Automatically append units to axis label string (when given) """
-    def append_units_wrapper(func, ax):
+def axis_units(ax: Axes, *, x_format_wrapper: Optional[Callable[Callable, Callable]]=None, y_format_wrapper: Optional[Callable[Callable, Callable]]=None, format_wrapper: Callable[Callable, Callable]=lambda x: x):
+    """ Adds automatic axis unit appending to axes x and y labels. Can optionally specify format wrapping functions for x axis, y axis, or both (e.g. for changing pint formatter)."""
+    def append_units_wrapper(func: Optional[Callable]=None, *, ax: Optional[Axis]=None, format_wrapper: Callable[Callable, Callable]=lambda x: x):
+        if func is None:
+            return partial(append_units_wrapper, ax=ax, format_wrapper=format_wrapper)
+        assert ax is not None, "Must provide the axis to be able to get units from"
+        
         @wraps(func)
         def wrapper(s: str, *args, **kwargs):
-            return func(f"{s}{unit_str_addon(ax.get_units())}", *args, **kwargs)
+            unit_str = f"{s}{format_wrapper(unit_str_addon)(ax.get_units())}"
+            return func(unit_str, *args, **kwargs)
+        
         return wrapper
 
-    ax.set_xlabel = append_units_wrapper(ax.set_xlabel, ax.xaxis)       # type: ignore
+    ax.set_xlabel = append_units_wrapper(ax.set_xlabel, ax=ax.xaxis, format_wrapper=x_format_wrapper or format_wrapper)
     ax.set_xlabel(ax.get_ylabel())
-    ax.set_ylabel = append_units_wrapper(ax.set_ylabel, ax.yaxis)       # type: ignore
+    ax.set_ylabel = append_units_wrapper(ax.set_ylabel, ax=ax.yaxis, format_wrapper=y_format_wrapper or format_wrapper)
     ax.set_ylabel(ax.get_ylabel())
 
 

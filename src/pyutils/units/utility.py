@@ -226,4 +226,4 @@ def unit_str_addon(unit: Union[NUM, UREG.Unit, PlainUnit]) -> str:
     if not isinstance(unit, (UREG.Unit, PlainUnit)) and not hasattr(unit, "units"):
         return ""
     unit = getattr(unit, "units", unit)
-    return " [-]" if unit == UREG.dimensionless else fr" [{unit:~P}]"
+    return " [-]" if unit == UREG.dimensionless else fr" [{unit}]"
