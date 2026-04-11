@@ -41,7 +41,7 @@ class mplConfig(ABC):
             with mpl.rc_context(self.config_params):
                 return func(*args, **kwargs)
             
-        if callable(args[0]):
+        if args and callable(args[0]):
             func = args[0]
             args = args[1:] if len(args) > 1 else ()
             return partial(wrapper, func=func)

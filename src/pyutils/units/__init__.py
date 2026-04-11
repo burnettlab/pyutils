@@ -17,7 +17,7 @@ package_path = Path(__file__).parent
 NUMBER_RE = re.compile(r"([-+]?(\d+(\.\d*)?|\.\d+))\s*\w*")
 
 
-unit_yaml = Path(globals().get("UNITS_DEF", os.getenv("UNITS_DEF", Path(__file__).parent / "default.cfg")))
+unit_yaml = Path(globals().get("UNITS_DEF", os.getenv("UNITS_DEF", package_path / "default.cfg")))
 assert unit_yaml.exists(), "No pint config yaml exists!"
 # Load pint configuration from yaml
 with open(unit_yaml, 'r') as f:
@@ -29,7 +29,7 @@ UREG.default_preferred_units = list(map(lambda k: getattr(UREG, k), cfg.get("def
 if cfg.get("Matplotlib") is not None:
     UREG.setup_matplotlib(enable=cfg["Matplotlib"])
 if unit_defs_file is not None:
-    if unit_yaml == Path(__file__).parent / "default.cfg":
+    if unit_yaml == package_path / "default.cfg":
         unit_defs_file = unit_yaml.parent / unit_defs_file
     else:
         unit_defs_file = Path(unit_defs_file).resolve()
